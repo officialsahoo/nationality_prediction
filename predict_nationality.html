@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check Your Nationality</title>
+</head>
+<body>
+
+    <div class="container">
+        <div class="main" style="width: 40%; margin:auto; border: solid 1px black; text-align: center;">
+            
+            <h4>Check nationality of a name</h4>
+            <div style="justify-content: center;">
+                <input type="text" name="Name" id="Name"><br>
+                <input type="button" value="Check" id="check">
+            </div>
+
+            
+            <div class="result" id="result" style="display: none;">
+                
+            </div>
+        </div>
+    </div>
+
+    <script>
+        check.onclick = async ()=>{
+
+            const obj = await fetch(`https://api.nationalize.io?name=${Name.value}`);
+            const respose = await obj.json();
+            const countries = respose.country;
+
+            let slNo = 1;
+            document.getElementById('result').innerHTML = "";
+            document.getElementById('result').innerHTML += "<h4>Names Nationality Prediction</h4>";
+            
+            for(let country of countries){
+                const regionNamesInEnglish = new Intl.DisplayNames(['en'], { type: 'region' });
+                let regionName = regionNamesInEnglish.of(country.country_id);
+            
+                document.getElementById('result').innerHTML += `<p> ${slNo}. ${regionName}(${country.probability}%) </p>`;
+
+                slNo++;
+            }
+            document.getElementById('result').style.display = "block";
+        }
+    </script>
+    
+</body>
+</html>
+
+
+
+
